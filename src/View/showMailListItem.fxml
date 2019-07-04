@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="293.0" prefWidth="709.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"> <!--fx:controller="Controller.ShowMailListItemController"-->
+   <children>
+      <Label fx:id="MailTextLabel" layoutX="157.0" layoutY="81.0" prefHeight="205.0" prefWidth="538.0" style="-fx-background-color: #ccffcc;" />
+      <Label fx:id="mailTimeInfo" layoutX="157.0" layoutY="6.0" prefHeight="26.0" prefWidth="538.0" style="-fx-background-color: #ffccff;" />
+      <Label fx:id="MailUserLabel" layoutX="157.0" layoutY="32.0" prefHeight="26.0" prefWidth="538.0" style="-fx-background-color: #ccffff;" />
+      <ImageView fx:id="UserImage" fitHeight="69.0" fitWidth="82.0" layoutX="43.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="downloadButton" layoutX="14.0" layoutY="242.0" mnemonicParsing="false" onAction="#download" prefHeight="46.0" prefWidth="125.0" style="-fx-background-color: yellow;" text="Download">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Label fx:id="metaData" layoutX="14.0" layoutY="120.0" prefHeight="123.0" prefWidth="126.0" />
+   </children>
+</AnchorPane>

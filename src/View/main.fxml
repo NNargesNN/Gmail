@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Main">
+   <children>
+      <ImageView fitHeight="710.0" fitWidth="1000.0" opacity="0.17" pickOnBounds="true">
+         <image>
+            <Image url="@../Repository/red.jpg" />
+         </image>
+      </ImageView>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="56.0" layoutX="14.0" layoutY="23.0" stroke="BLACK" strokeType="INSIDE" width="152.0" />
+      <VBox layoutX="14.0" layoutY="31.0" prefHeight="490.0" prefWidth="148.0" spacing="10.0">
+         <children>
+            <ImageView fitHeight="45.0" fitWidth="129.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Repository/logo_gmail.png" />
+               </image>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView fx:id="composeButton" fitHeight="61.0" fitWidth="152.0" onMouseClicked="#compose" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Repository/compose.jpg" />
+               </image>
+            </ImageView>
+            <Button fx:id="InboxButton" mnemonicParsing="false" onAction="#inbox" prefHeight="50.0" prefWidth="163.0" style="-fx-background-color: white;" text="Inbox" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <effect>
+                  <InnerShadow color="#cacaca" />
+               </effect>
+            </Button>
+            <Button fx:id="sentButton" mnemonicParsing="false" onAction="#sent" prefHeight="50.0" prefWidth="163.0" style="-fx-background-color: white;" text="Sent" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <effect>
+                  <InnerShadow color="#c7c7c7" />
+               </effect>
+            </Button>
+            <Button fx:id="draftButton" mnemonicParsing="false" onAction="#draft" prefHeight="50.0" prefWidth="148.0" style="-fx-background-color: white;" text="Draft" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <effect>
+                  <InnerShadow color="#c5c5c5" />
+               </effect>
+            </Button>
+            <Button fx:id="outboxButton" mnemonicParsing="false" onAction="#outbox" prefHeight="50.0" prefWidth="148.0" style="-fx-background-color: white;" text="Outbox" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <effect>
+                  <InnerShadow color="#c5c5c5" />
+               </effect>
+            </Button>
+            <Button fx:id="importantButton" mnemonicParsing="false" onAction="#important" prefHeight="50.0" prefWidth="148.0" style="-fx-background-color: white;" text="Important" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <effect>
+                  <InnerShadow color="#c5c5c5" />
+               </effect>
+            </Button>
+            <Button fx:id="unreadButton" mnemonicParsing="false" onAction="#unread" prefHeight="50.0" prefWidth="148.0" style="-fx-background-color: white;" text="Unread" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <effect>
+                  <InnerShadow color="#c5c5c5" />
+               </effect>
+            </Button>
+         </children>
+      </VBox>
+      <TextField fx:id="searchTextField" layoutX="272.0" layoutY="27.0" onAction="#searchText" prefHeight="56.0" prefWidth="438.0" promptText="Search mail">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
+      <ListView fx:id="mailsList" layoutX="206.0" layoutY="99.0" onMouseClicked="#openMail" prefHeight="560.0" prefWidth="660.0" />
+      <Button fx:id="signOutButton" layoutX="866.0" layoutY="99.0" mnemonicParsing="false" onAction="#signOut" prefHeight="26.0" prefWidth="123.0" style="-fx-background-color: #ff4242;" text="Sign Out" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <effect>
+            <InnerShadow color="#090404" />
+         </effect>
+      </Button>
+      <ImageView fx:id="settingButton" fitHeight="56.0" fitWidth="102.0" layoutX="928.0" layoutY="23.0" onMouseClicked="#setting" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Repository/setting.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="searchBuuton" fitHeight="56.0" fitWidth="56.0" layoutX="206.0" layoutY="26.0" onDragDetected="#search" pickOnBounds="true">
+         <image>
+            <Image url="@../Repository/magnifier-895-1115054.png" />
+         </image>
+      </ImageView>
+      <VBox layoutX="710.0" layoutY="26.0" prefHeight="56.0" prefWidth="123.0">
+         <children>
+            <ToggleButton fx:id="searchBySubjectButton" mnemonicParsing="false" onAction="#searchBySubject" prefHeight="26.0" prefWidth="126.0" style="-fx-background-color: #da4a4a;" text="Search By subject" textFill="WHITE">
+               <toggleGroup>
+                  <ToggleGroup fx:id="searchBy" />
+               </toggleGroup>
+               <effect>
+                  <InnerShadow color="WHITE" />
+               </effect></ToggleButton>
+            <ToggleButton fx:id="searchByUsernameButton" mnemonicParsing="false" onAction="#searchByUsernameButton" prefHeight="26.0" prefWidth="125.0" style="-fx-background-color: #da4a4a;" text="search by username" textFill="WHITE" toggleGroup="$searchBy">
+               <effect>
+                  <InnerShadow color="WHITE" />
+               </effect></ToggleButton>
+         </children>
+      </VBox>
+      <ImageView fx:id="refreshButton" fitHeight="56.0" fitWidth="56.0" layoutX="856.0" layoutY="22.0" onMouseClicked="#refresh" pickOnBounds="true">
+         <image>
+            <Image url="@../Repository/ref4.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
