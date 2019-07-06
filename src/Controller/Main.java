@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static Controller.setIP.currentUser;
-import static Controller.setIP.objectOut;
+import static Connection.ListenerService.result;
+import static Controller.setIP.*;
 import static java.lang.Thread.sleep;
 
 public class Main {
@@ -54,70 +54,15 @@ public class Main {
     @FXML
     public ImageView refreshButton;
     public static MailType mailType = MailType.Inbox;
-    public ArrayList<UserMail> MailsToShow ;
+    public ArrayList<UserMail> MailsToShow;
     public List<Gmail> GmailsToShow = new ArrayList<>();
     public static Gmail selected;
+    public static Gmail currentGmail;
+    public static List<UserMail> Mails = new ArrayList<>();
 
 
-    public void initialize() {
+    public void initialize() throws InterruptedException, IOException {
 
-        selected = null;
-        MailsToShow = new ArrayList<>();
-        //* server sends all mails to client as an arraylisti chizi!;
-        //*client read them
-        //*
-        // send request to server
-        // read  signin.currentUser.emails from db
-        //alan hame ye email ha hast bayad faghat barhasbe label bashe
-        //bar hasbe time e beshe kari kard importanta bashe aval
-
-        //initialize MailToShow
-       // MailsToShow=currentUser.mails;
-
-        if (currentUser.mails != null && currentUser.mails.size() != 0) {
-            if (mailType.equals(MailType.Inbox)) {
-                for (UserMail userMail : currentUser.mails) {
-                    if (userMail.getMailTypeSet().contains(MailType.Inbox)) {
-                        MailsToShow.add(userMail);
-                    }
-                }
-            } else if (mailType.equals(MailType.Sent)) {
-                for (UserMail userMail : currentUser.mails) {
-                    if (userMail.getMailTypeSet().contains(MailType.Sent)) {
-                        MailsToShow.add(userMail);
-                    }
-                }
-            } else if (mailType.equals(MailType.OutBox)) {
-                for (UserMail userMail : currentUser.mails) {
-                    if (userMail.getMailTypeSet().contains(MailType.OutBox)) {
-                        MailsToShow.add(userMail);
-                    }
-                }
-            } else if (mailType.equals(MailType.important)) {
-                for (UserMail userMail : currentUser.mails) {
-                    if (userMail.getMailTypeSet().contains(MailType.important)) {
-                        MailsToShow.add(userMail);
-                    }
-                }
-            } else if (mailType.equals(MailType.unread)) {
-                for (UserMail userMail : currentUser.mails) {
-                    if (userMail.getMailTypeSet().contains(MailType.Unread)) {
-                        MailsToShow.add(userMail);
-                    }
-                }
-            } else {
-                for (UserMail userMail : currentUser.mails) {
-                    if (userMail.getMailTypeSet().contains(MailType.Inbox)) {
-                        MailsToShow.add(userMail);
-                    }
-                }
-            }
-            if(MailsToShow!=null && MailsToShow.size()!=0)
-            GmailsToShow = MailsToShow.stream().map(a -> a.getGmail()).sorted(Comparator.comparing(Gmail::getLocalDateTime)).collect(Collectors.toList());
-           // System.out.println(GmailsToShow);
-            mailsList.setItems(FXCollections.observableList(GmailsToShow));
-            mailsList.setCellFactory(mail -> new mailItem());
-        }
     }
 
 
@@ -127,17 +72,69 @@ public class Main {
     }
 
 
-    public void inbox(ActionEvent actionEvent) throws IOException {
+    public void inbox(ActionEvent actionEvent) throws IOException, InterruptedException {
 
-        mailType = MailType.Inbox;
-        new PageLoader().load("../View/main.fxml");
+        //--------
+        List<Gmail> inbox = new ArrayList<>();
+        objectOut.writeObject(new Message(MessageType.Inbox, currentUser));
+        objectOut.flush();
+        synchronized (Model.Main.WAIT) {
+            Model.Main.WAIT.wait();
+        }
+
+        inbox = ((ArrayList<UserMail>) result).stream().map(a -> a.getGmail()).collect(Collectors.toList());
+        GmailsToShow = inbox;
+        Set<MailType> mailTypes=new HashSet<>();
+        mailTypes.add(MailType.Inbox);
+        for (int i = 0; i <inbox.size() ; i++) {
+            if(!currentUser.mails.contains(new UserMail(inbox.get(i)))){
+
+                currentUser.mails.add(new UserMail(inbox.get(i),mailTypes));
+            }
+        }
+        OutBox = new ArrayList<>();
+        mailsList.setItems(FXCollections.observableArrayList(inbox));
+        inbox.sort((a,b)->a.getLocalDateTime().compareTo(b.getLocalDateTime()));
+        mailsList.setCellFactory(new Callback<ListView<Gmail>, ListCell<Gmail>>() {
+            @Override
+            public ListCell<Gmail> call(ListView<Gmail> gmailListView) {
+
+                return new mailItem();
+            }
+        });
     }
 
 
-    public void sent(ActionEvent actionEvent) throws IOException {
+    public void sent(ActionEvent actionEvent) throws IOException, InterruptedException {
 
-        mailType = MailType.Sent;
-        new PageLoader().load("../View/main.fxml");
+        List<Gmail> sent = new ArrayList<>();
+        objectOut.writeObject(new Message(MessageType.Sent, currentUser));
+        objectOut.flush();
+        synchronized (Model.Main.WAIT) {
+            Model.Main.WAIT.wait();
+        }
+
+        sent = ((ArrayList<UserMail>) result).stream().map(a -> a.getGmail()).collect(Collectors.toList());
+        GmailsToShow = sent;
+        Set<MailType> mailTypes=new HashSet<>();
+        mailTypes.add(MailType.Sent);
+        for (int i = 0; i <sent.size() ; i++) {
+            if(!currentUser.mails.contains(new UserMail(sent.get(i)))){
+
+                currentUser.mails.add(new UserMail(sent.get(i),mailTypes));
+            }
+        }
+
+        OutBox = new ArrayList<>();
+        sent.sort((a,b)->a.getLocalDateTime().compareTo(b.getLocalDateTime()));
+        mailsList.setItems(FXCollections.observableArrayList(sent));
+        mailsList.setCellFactory(new Callback<ListView<Gmail>, ListCell<Gmail>>() {
+            @Override
+            public ListCell<Gmail> call(ListView<Gmail> gmailListView) {
+
+                return new mailItem();
+            }
+        });
     }
 
 
@@ -148,15 +145,23 @@ public class Main {
 
     public void outbox(ActionEvent actionEvent) throws IOException {
 
-        mailType = MailType.OutBox;
-        new PageLoader().load("../View/main.fxml");
+        GmailsToShow = OutBox;
+        OutBox.sort((a,b)->a.getLocalDateTime().compareTo(b.getLocalDateTime()));
+        mailsList.setItems(FXCollections.observableArrayList(OutBox));
+        mailsList.setCellFactory(new Callback<ListView<Gmail>, ListCell<Gmail>>() {
+            @Override
+            public ListCell<Gmail> call(ListView<Gmail> gmailListView) {
+
+                return new mailItem();
+            }
+        });
+
     }
 
 
     public void important(ActionEvent actionEvent) throws IOException {
 
-        mailType = MailType.important;
-        new PageLoader().load("../View/main.fxml");
+
     }
 
 
@@ -175,57 +180,60 @@ public class Main {
     public void openMail(MouseEvent mouseEvent) throws IOException {
 
         selected = mailsList.getSelectionModel().getSelectedItem();
+        selected.setRead(true);
+
+       // setIP.currentUser.mails.get(setIP.currentUser.mails.indexOf(new UserMail(Main.selected,null))).getGmail().setRead(true);
         new PageLoader().load("../View/showMail.fxml");
 
     }
 
 
-    public void signOut(ActionEvent actionEvent) throws IOException {
+    public void signOut(ActionEvent actionEvent) throws IOException, InterruptedException {
+        objectOut.writeObject(new Message(MessageType.SignOut,currentUser,currentUser.mails));
 
+        currentUser = null;
         new PageLoader().load("../View/SignIn.fxml");
     }
 
 
     public void searchBySubject(ActionEvent actionEvent) {
 
-        if (GmailsToShow != null && GmailsToShow.size() != 0) {
-            List<Gmail> searchResult = new ArrayList<>();
-            for (Gmail gmail : GmailsToShow) {
-                if (gmail.getSubject().toLowerCase().
-                        startsWith(searchTextField.getText().toLowerCase()))
-                    searchResult.add(gmail);
-            }
-            mailsList.setItems(FXCollections.observableArrayList(searchResult));
-            mailsList.setCellFactory(new Callback<ListView<Gmail>, ListCell<Gmail>>() {
-                @Override
-                public ListCell<Gmail> call(ListView<Gmail> gmailListView) {
-
-                    return new mailItem();
-                }
-            });
+        List<Gmail> searchResult = new ArrayList<>();
+        for (Gmail gmail : GmailsToShow) {
+            if (gmail.getSubject().toLowerCase().
+                    startsWith(searchTextField.getText().toLowerCase()))
+                searchResult.add(gmail);
         }
+        mailsList.setItems(FXCollections.observableArrayList(searchResult));
+        mailsList.setCellFactory(new Callback<ListView<Gmail>, ListCell<Gmail>>() {
+            @Override
+            public ListCell<Gmail> call(ListView<Gmail> gmailListView) {
+
+                return new mailItem();
+            }
+        });
+
     }
 
 
     public void searchByUsernameButton(ActionEvent actionEvent) {
 
-        if (GmailsToShow != null && GmailsToShow.size() != 0) {
-            List<Gmail> searchResult = new ArrayList<>();
-            for (Gmail gmail : GmailsToShow) {
-                if (gmail.getSender().getUsername().toLowerCase().
-                        startsWith(searchTextField.getText().toLowerCase()) || gmail.getReceiver().getUsername().toLowerCase().
-                        startsWith(searchTextField.getText().toLowerCase()))
-                    searchResult.add(gmail);
-            }
-            mailsList.setItems(FXCollections.observableArrayList(searchResult));
-            mailsList.setCellFactory(new Callback<ListView<Gmail>, ListCell<Gmail>>() {
-                @Override
-                public ListCell<Gmail> call(ListView<Gmail> gmailListView) {
-
-                    return new mailItem();
-                }
-            });
+        List<Gmail> searchResult = new ArrayList<>();
+        for (Gmail gmail : GmailsToShow) {
+            if (gmail.getSender().getUsername().toLowerCase().
+                    startsWith(searchTextField.getText().toLowerCase()) || gmail.getReceiver().getUsername().toLowerCase().
+                    startsWith(searchTextField.getText().toLowerCase()))
+                searchResult.add(gmail);
         }
+        mailsList.setItems(FXCollections.observableArrayList(searchResult));
+        mailsList.setCellFactory(new Callback<ListView<Gmail>, ListCell<Gmail>>() {
+            @Override
+            public ListCell<Gmail> call(ListView<Gmail> gmailListView) {
+
+                return new mailItem();
+            }
+        });
+
     }
 
 
@@ -241,14 +249,14 @@ public class Main {
 
 
     public void refresh(MouseEvent mouseEvent) throws IOException, InterruptedException {
-        //read from server again!
-        objectOut.writeObject(new Message(MessageType.Refresh, currentUser));
-        objectOut.flush();
-        sleep(1000);
-        if (ListenerService.result instanceof User) {
-            currentUser = (User) ListenerService.result;
-            new PageLoader().load("../View/main.fxml");
 
+        objectOut.writeObject(new Message(MessageType.Refresh, currentUser));
+        synchronized (Model.Main.WAIT) {
+            Model.Main.WAIT.wait();
         }
+        currentUser.mails = (ArrayList<UserMail>) result;
+        showMail.userMails=currentUser.mails;
+        new PageLoader().load("../View/main.fxml");
+
     }
 }

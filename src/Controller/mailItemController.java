@@ -6,11 +6,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Circle;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class mailItemController {
     @FXML
@@ -27,7 +31,7 @@ public class mailItemController {
     public Label textLabel;
     @FXML
     private Gmail mail;
-    private static final String UNDEFINED_PROFILE_PHOTO_URL = "address!";
+    private static final String UNDEFINED_PROFILE_PHOTO_URL = "/User'sPictures/photo.jpg";
 
 
     public mailItemController(Gmail mail) throws IOException {
@@ -55,11 +59,11 @@ public class mailItemController {
             textLabel.setText(mail.getMessage().substring(0, 20));
         else
             textLabel.setText(mail.getMessage());
-//        //String url=mail.getSender().get();
-//        if(!Files.exists(Paths.get(url)))
-//            url=UNDEFINED_PROFILE_PHOTO_URL;
-//        senderImageView.setImage(new Image(Paths.get(url).toUri().toString()));
-        //      senderImageView.setClip(new Circle(15,15,15));
+        //String url=mail.getSender().get();
+
+            String url=UNDEFINED_PROFILE_PHOTO_URL;
+        senderImageView.setImage(new Image(Paths.get(url).toUri().toString()));
+              senderImageView.setClip(new Circle(15,15,15));
         return root;
     }
 }

@@ -1,7 +1,6 @@
 package Controller;
 
 import Common.Gmail;
-
 import javafx.scene.control.ListCell;
 
 import java.io.IOException;
@@ -12,7 +11,14 @@ public class mailItem extends ListCell<Gmail> {
 
         super.updateItem(mail, empty);
         if (mail != null) {
-            setStyle("-fx-background-color: pink");
+            if (mail.isRead())
+                setStyle("-fx-background-color: #cceeff");
+            else if (!mail.isRead() && !mail.isImportant()) {
+                setStyle("-fx-background-color: #66ccff");
+            }
+            if (mail.isImportant()) {
+                setStyle("-fx-background-color: #ff6699");
+            }
             try {
                 setGraphic(new mailItemController(mail).init());
 

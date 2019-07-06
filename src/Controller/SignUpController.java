@@ -14,8 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 import static Connection.ListenerService.result;
-import static Controller.setIP.currentUser;
-import static Controller.setIP.objectOut;
+import static Controller.setIP.*;
 import static java.lang.Thread.sleep;
 
 import java.io.IOException;
@@ -62,8 +61,8 @@ public class SignUpController {
             takenUsername.setVisible(false);
         }
         //to see if passwordText and confirmation matches or not
-        else if (passwordTextField.isVisible() &&(!passwordTextField.getText().equals(confirmTextField.getText()))||
-        password.isVisible() && !password.getText().equals(confirm.getText())) {
+        else if ((passwordTextField.isVisible() && !passwordTextField.getText().equals(confirmTextField.getText())) ||
+                (password.isVisible() && !password.getText().equals(confirm.getText()))) {
             notMatched.setVisible(true);
             passwordError.setVisible(false);
             wrongUsernameLabel.setVisible(false);
@@ -84,13 +83,16 @@ public class SignUpController {
             currentUser.setAge(age);
             currentUser.setName(firstname.getText());
             currentUser.setLastName(lastname.getText());
-
-            objectOut.writeObject(new Message(MessageType.SignUp1, currentUser));
+            objectOut.writeObject(new Message(MessageType.SignUp1,  currentUser));
             objectOut.flush();
-            sleep(1000);
-            if ((boolean) result)
+            synchronized (Main.WAIT){
+                Main.WAIT.wait();
+            }
+          //  sleep(1000);
+            System.out.println("user wants to sign up1 " + result);
+            if (result != null && (boolean) result)
                 new PageLoader().load("../View/SignUpNext.fxml");
-            else if (!(boolean) result)
+            else if (result != null && !(boolean) result)
                 cantSignUpLabel.setVisible(true);
 
         }

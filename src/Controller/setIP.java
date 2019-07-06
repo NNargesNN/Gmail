@@ -1,5 +1,6 @@
 package Controller;
 
+import Common.Gmail;
 import Common.User;
 import Model.PageLoader;
 import javafx.event.ActionEvent;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class setIP {
     @FXML
@@ -18,6 +20,7 @@ public class setIP {
     @FXML
     public Button ConnectButton;
     public static User currentUser;
+    public static ArrayList<Gmail> OutBox=new ArrayList<>();
     public static final int requestPort = 1379;
     public static String serverIP;
     public static Socket client;

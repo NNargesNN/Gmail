@@ -10,37 +10,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class Main extends Application {
+    public static final Object WAIT=new Object();
 
-//    public static User currentUser;
-//    public static final int requestPort = 1379;
-//    public static final String serverIP = "localhost";
-//    public static Socket client;
-//    public static ObjectOutputStream objectOut;
-//    public static ObjectInputStream objectIn;
-//
-//    static {
-//        try {
-//            client = new Socket(serverIP , requestPort);
-//            objectOut = new ObjectOutputStream(client.getOutputStream());
-//            objectIn = new ObjectInputStream(client.getInputStream());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-//
-
-//    public static void initializeServices() {
-//        Thread listenerThread = new Thread(new Connection.ListenerService(), "Listener Thread");
-//        listenerThread.setDaemon(true);
-//        listenerThread.start();
-//    }
-//
-//
-//    @Override
-//    public void init(){
-//        initializeServices();
-//    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{

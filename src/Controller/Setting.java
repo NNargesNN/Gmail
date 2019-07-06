@@ -2,6 +2,8 @@ package Controller;
 
 import Common.Message;
 import Common.MessageType;
+import Common.User;
+import Connection.ListenerService;
 import Model.Main;
 import Model.PageLoader;
 import javafx.event.ActionEvent;
@@ -13,7 +15,7 @@ import java.io.IOException;
 
 import static Controller.setIP.currentUser;
 import static Controller.setIP.objectOut;
-
+import static Model.Main.WAIT;
 import static java.lang.Thread.sleep;
 
 public class Setting {
@@ -23,10 +25,15 @@ public class Setting {
     public TextField FirstNameTextField;
     public TextField LastNameTextField;
     public Button ChangeImageButton;
-    public ImageView ImgeView;
+    public ImageView ImageView;
     public TextField PhoneNoTextField;
 
-
+public void initialize(){
+    FirstNameTextField.setText(setIP.currentUser.getName());
+    LastNameTextField.setText(setIP.currentUser.getLastName());
+    PassTextField.setText(setIP.currentUser.getPassword());
+    PhoneNoTextField.setText(String.valueOf(currentUser.getPhoneNumber()));
+}
     public void ChangeImage(ActionEvent actionEvent) {
 //file chooser
         //berize too ye addressi
@@ -36,24 +43,25 @@ public class Setting {
 
     public void SaveChanges(ActionEvent actionEvent) throws IOException, InterruptedException {
 
-        if (PassTextField.getText() != null && !PassTextField.getText().isEmpty()) {
-            currentUser.setPassword(PassTextField.getText());
-        }
-        if (FirstNameTextField.getText() != null && !FirstNameTextField.getText().isEmpty()) {
-            currentUser.setName(FirstNameTextField.getText());
-        }
-        if (LastNameTextField.getText() != null && !LastNameTextField.getText().isEmpty()) {
-            currentUser.setLastName(LastNameTextField.getText());
-        }
-        if (PhoneNoTextField.getText() != null && !PhoneNoTextField.getText().isEmpty()) {
-            currentUser.setPhoneNumber(Integer.parseInt(PhoneNoTextField.getText()));
-        }
-        System.out.println(currentUser);
 
-
-        objectOut.writeObject(new Message(MessageType.Change , currentUser));
+        currentUser.setName(FirstNameTextField.getText());
+        currentUser.setLastName(LastNameTextField.getText());
+        currentUser.setPassword(PassTextField.getText());
+        User newUser = new User(currentUser.getUsername() , currentUser.getPassword());
+       // newUser.setImage(currentUser.getImage());
+        newUser.setName(currentUser.getName());
+        newUser.setLastName(currentUser.getLastName());
+        newUser.setAge(currentUser.getAge());
+        newUser.setPhoneNumber(currentUser.getPhoneNumber());
+        newUser.setGender(currentUser.getGender());
+        newUser.setMails(currentUser.getMails());
+        objectOut.writeObject(new Message(MessageType.Change , newUser));
         objectOut.flush();
-        sleep(1000);
+
+        synchronized (WAIT){
+            WAIT.notifyAll();
+        }
+        currentUser=(User) ListenerService.result;
         new PageLoader().load("../View/main.fxml");
 
     }
