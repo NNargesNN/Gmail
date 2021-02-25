@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SignUpController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="543.0" layoutX="87.0" layoutY="79.0" stroke="BLACK" strokeType="INSIDE" width="826.0" />
+      <ImageView fitHeight="45.0" fitWidth="141.0" layoutX="97.0" layoutY="90.0">
+         <image>
+            <Image url="@../Repository/Google.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="97.0" layoutY="142.0" text="Create your Google Account">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="130.0" layoutY="170.0" text="to continue to Gmail">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <TextField fx:id="firstname" layoutX="128.0" layoutY="214.0" prefHeight="45.0" prefWidth="199.0" promptText="First Name" />
+      <TextField fx:id="lastname" layoutX="342.0" layoutY="214.0" prefHeight="46.0" prefWidth="199.0" promptText="Last Name" />
+      <TextField fx:id="username" layoutX="128.0" layoutY="292.0" prefHeight="54.0" prefWidth="418.0" promptText="Username" />
+      <TextField fx:id="passwordTextField" layoutX="130.0" layoutY="410.0" prefHeight="54.0" prefWidth="199.0" promptText="Password" visible="false" />
+      <TextField fx:id="confirmTextField" layoutX="342.0" layoutY="410.0" prefHeight="54.0" prefWidth="199.0" promptText="Confirm" visible="false" />
+      <PasswordField fx:id="password" layoutX="130.0" layoutY="410.0" prefHeight="54.0" prefWidth="199.0" promptText="Password" />
+      <PasswordField fx:id="confirm" layoutX="342.0" layoutY="410.0" prefHeight="54.0" prefWidth="199.0" promptText="Confirm" />
+      <ImageView fitHeight="26.0" fitWidth="30.0" layoutX="546.0" layoutY="421.0" onMouseClicked="#visibleAction">
+         <image>
+            <Image url="@../Repository/eye.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="443.0" layoutY="545.0" mnemonicParsing="false" onAction="#nextAction" prefHeight="35.0" prefWidth="103.0" style="-fx-background-color: #558dff;" text="Next" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Label fx:id="wrongUsernameLabel" layoutX="135.0" layoutY="518.0" prefHeight="26.0" prefWidth="390.0" text="You can only use letters , numbers and dot!" textFill="#9c0e0e" visible="false">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font></Label>
+      <Label fx:id="passwordError" layoutX="128.0" layoutY="477.0" prefHeight="26.0" prefWidth="469.0" text="your password must contains at least 8 charachters (numbers and letters)" textFill="#9c0e0e" visible="false">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font></Label>
+      <Label fx:id="notMatched" layoutX="130.0" layoutY="388.0" prefHeight="22.0" prefWidth="410.0" text="Password and it's confirmation doesn't match!" textFill="#9c0e0e" visible="false">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font></Label>
+      <Label layoutX="145.0" layoutY="561.0" onMouseClicked="#signinAction" text="Sign in instead" textFill="#558dff">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Label>
+      <DatePicker fx:id="birthdate" layoutX="627.0" layoutY="408.0" prefHeight="22.0" prefWidth="176.0" promptText="Birth Date" />
+      <Label fx:id="ageLimit" layoutX="627.0" layoutY="447.0" prefHeight="35.0" prefWidth="273.0" text="you must be at least 13 years old to sign up" textFill="#9c0e0e" visible="false">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font></Label>
+      <Label fx:id="notFilled" layoutX="627.0" layoutY="535.0" prefHeight="35.0" prefWidth="176.0" text="Please fill all " visible="false">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="takenUsername" layoutX="128.0" layoutY="270.0" prefHeight="22.0" prefWidth="325.0" text="This username has already been taken" textFill="#9c0e0e" visible="false">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font></Label>
+      <Label fx:id="cantSignUpLabel" layoutX="343.0" layoutY="587.0" prefHeight="5.0" prefWidth="314.0" text="This user has been taken" textFill="#9c0e0e" visible="false">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="132.0" fitWidth="162.0" layoutX="732.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Repository/gmail.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
